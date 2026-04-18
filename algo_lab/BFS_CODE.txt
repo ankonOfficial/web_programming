@@ -1,0 +1,54 @@
+#include <stdio.h>
+
+#define MAX 10
+
+// Function prototypes to avoid global variable issues
+void bfs(int graph[MAX][MAX], int n, int start);
+
+int main() {
+    int n = 4; // Number of nodes (0, 1, 2, 3)
+    int start = 0;
+
+    // Standard 0-indexed Adjacency Matrix
+    int graph[MAX][MAX] = {
+        {0, 1, 1, 0}, // Node 0 connected to 1, 2
+        {1, 0, 1, 0}, // Node 1 connected to 0, 2
+        {1, 1, 0, 1}, // Node 2 connected to 0, 1, 3
+        {0, 0, 1, 0}  // Node 3 connected to 2
+    };
+
+    bfs(graph, n, start);
+
+    return 0;
+}
+
+void bfs(int graph[MAX][MAX], int n, int start) {
+    int queue[MAX];
+    int front = 0, rear = 0; // Standard 0-initialization
+    int visited[MAX] = {0};
+
+    // Enqueue start node
+    visited[start] = 1;
+    queue[rear++] = start;
+
+    printf("BFS Traversal Order: ");
+
+    while(front < rear) { // Simple "Not Empty" condition
+        int node = queue[front++];
+        printf("%d ", node);
+
+        for(int i = 0; i < n; i++) {
+            if(graph[node][i] == 1 && !visited[i]) {
+                visited[i] = 1;
+                queue[rear++] = i;
+                
+                // Safety check for queue overflow
+                if(rear == MAX) {
+                    printf("\nQueue Overflow!");
+                    return;
+                }
+            }
+        }
+    }
+    printf("\n");
+}
