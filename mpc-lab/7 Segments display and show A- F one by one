@@ -1,0 +1,68 @@
+#define A 11
+#define B 10
+#define C 7
+#define D 8
+#define E 9
+#define F 12
+#define G 13
+#define DP 6
+int segments[] = {A, B, C, D, E, F, G, DP};
+
+void setup()
+{
+pinMode(6, OUTPUT);
+pinMode(7, OUTPUT);
+pinMode(8, OUTPUT);
+pinMode(9, OUTPUT);
+pinMode(10, OUTPUT);
+pinMode(11, OUTPUT);
+pinMode(12, OUTPUT);
+pinMode(13, OUTPUT);
+}
+
+void displayDigit(int num) {
+// Turn all segments OFF first
+for (int i = 0; i < 7; i++) {
+digitalWrite(segments[i], HIGH);
+}
+
+switch (num) {
+case 10: // A
+digitalWrite(A,LOW); digitalWrite(B,LOW); digitalWrite(C,LOW);
+digitalWrite(E,LOW); digitalWrite(F,LOW); digitalWrite(G,LOW);
+break;
+
+case 11: // b
+digitalWrite(C,LOW); digitalWrite(D,LOW);
+digitalWrite(E,LOW); digitalWrite(F,LOW); digitalWrite(G,LOW);
+break;
+
+case 12: // C
+digitalWrite(A,LOW); digitalWrite(D,LOW);
+digitalWrite(E,LOW); digitalWrite(F,LOW);
+break;
+
+case 13: // d
+digitalWrite(B,LOW); digitalWrite(C,LOW);
+digitalWrite(D,LOW); digitalWrite(E,LOW); digitalWrite(G,LOW);
+break;
+
+case 14: // E
+digitalWrite(A,LOW); digitalWrite(D,LOW);
+digitalWrite(E,LOW); digitalWrite(F,LOW); digitalWrite(G,LOW);
+break;
+
+case 15: // F
+digitalWrite(A,LOW);
+digitalWrite(E,LOW); digitalWrite(F,LOW); digitalWrite(G,LOW);
+break;
+
+}
+}
+
+void loop() {
+for (int i = 10; i <= 15; i++) {
+displayDigit(i);
+delay(1000);
+}
+}
