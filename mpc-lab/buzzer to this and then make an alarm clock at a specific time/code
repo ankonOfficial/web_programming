@@ -1,0 +1,88 @@
+byte segValue[10][7] = {
+{0,0,0,0,0,0,1}, //0
+{1,0,0,1,1,1,1}, //1
+{0,0,1,0,0,1,0}, //2
+{0,0,0,0,1,1,0}, //3
+{1,0,0,1,1,0,0}, //4
+{0,1,0,0,1,0,0}, //5
+{0,1,0,0,0,0,0}, //6
+{0,0,0,1,1,1,1}, //7
+{0,0,0,0,0,0,0}, //8
+{0,0,0,0,1,0,0} //9
+};
+
+byte segPin[8]={2,3,4,5,6,7,8,9};
+byte digitPin[2] = {A0,A1};
+int buzzer = 10; // Buzzer Pin
+
+// Alarm Settings
+int alarmMinute = 0;
+int alarmSecond = 05;
+
+void setup() {
+for(int i=0; i<8; i++){
+pinMode(segPin[i], OUTPUT);
+}
+pinMode(digitPin[0], OUTPUT);
+pinMode(digitPin[1], OUTPUT);
+pinMode(buzzer, OUTPUT);
+
+digitalWrite(digitPin[0], LOW);
+digitalWrite(digitPin[1], LOW);
+}
+
+void loop() {
+// This loop represents the "Seconds" passing
+for (int s = 0; s < 60; s++) {
+// Check if current second matches alarm (assuming we are counting 0-59)
+if (s == alarmSecond) {
+triggerAlarm();
+}
+
+// Display the current second for 1 second total
+// Since each display_N cycle takes about 10ms, we run it 100 times
+display_N(s);
+}
+}
+
+void display_N(int num) {
+int und = num % 10;
+int dec = (num % 100) / 10;
+
+// Refresco dinamico (Dynamic Refresh)
+// 50 cycles * (10ms delays + microdelays) approx = 1 second
+for(int i=0; i<100; i++) {
+segOutput(1, und, 1);
+delay(10);
+segOutput(0, dec, 1);
+delay(10);
+
+}
+}
+
+void triggerAlarm() {
+// Beep 20 times when alarm hits
+for(int i=0; i<20; i++) {
+digitalWrite(buzzer, HIGH);
+delay(10);
+digitalWrite(buzzer, LOW);
+delay(10);
+}
+}
+
+void segClear(){
+for(int i=0; i<8; i++){
+digitalWrite(segPin[i], HIGH);
+}
+}
+
+void segOutput(int d, int Number, int dp){
+segClear();
+digitalWrite(digitPin[d], HIGH);
+for(int i=0; i<7; i++){
+digitalWrite(segPin[i], segValue[Number][i]);
+}
+digitalWrite(segPin[7], dp);
+delayMicroseconds(1000);
+digitalWrite(digitPin[d], LOW);
+}
